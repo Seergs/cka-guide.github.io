@@ -67,6 +67,10 @@ metadata:
 spec:
 ```
 
+Si no hay un scheduler tu puedes asignarlo directamente en el yaml con:
+nodeName:
+o creando un archivo de tipo Binding y pasandolo por un http request
+
 ## Services
 
 ### NodePort
@@ -154,4 +158,16 @@ kubectl config set-context --current --namespace=<namespace>
 
 ```sh
 kubectl config view | grep namespace
+```
+
+
+**Actualizar un pod**
+
+```sh
+kubectl replace --force -f nginx.yaml
+```
+
+**cuenta cuantos pods, eliminando la columna**
+```sh
+kubectl get pod --selector env=prod --no-headers | wc -l
 ```
