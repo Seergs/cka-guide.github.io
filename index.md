@@ -92,6 +92,76 @@ o creando un archivo de tipo Binding y pasandolo por un http request
 
 ![replicaset yaml](./assets/replicaset.jpg)
 
+
+### Taint
+Esto no garantiza que el pod decida a cual nodo irse, lo que hace es que el nodo pueda aceptar un pod o no 
+
+There are 3 taint effects
+
+-NoSchedule: ningun pod se va a ir a ese nodo a menos que tu hagas el toleration a el.
+-PreferNoSchedule: intentara no ponerlo pero si no hay de otra pondra el pod ahi 
+-NoExecute: debes poner el toleration para que se qude ahi de otra forma mata todos 
+
+```sh
+kubectl taint nodes node1 app=blue:NoSchedule
+```
+untaint
+
+```sh
+kubectl taint nodes node1 key=values:NoSchedule-
+```
+### Selector
+El pod decide a cual node irse, es  como un label a un node
+
+```yaml
+apiVersion:
+kind:
+metadata:
+
+spec:
+  nodeSelector:
+    size: Large
+```
+
+### Node Affinity
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+ name: myapp-pod
+spec:
+ containers:
+ - name: data-processor
+   image: data-processor
+ affinity:
+   nodeAffinity:
+     requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: size
+            operator: In
+            values: 
+            - Large
+            - Medium 
+```
+Node Affinity Types
+- Available
+
+requiredDuringSchedulingIgnoredDuringExecution
+preferredDuringSchedulingIgnoredDuringExecution
+
+- Planned
+
+requiredDuringSchedulingRequiredDuringExecution
+preferredDuringSchedulingRequiredDuringExecution
+
+![Affinity](./assets/Affinity.png)
+
+
+```sh 
+kubectl label nodes node-1 size=Large
+```
 ## Comandos útiles
 
 **Correr pod sin usar yaml**
