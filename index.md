@@ -112,7 +112,7 @@ kubectl taint nodes node1 app=blue:NoSchedule
 ```sh
 kubectl taint nodes node1 key=values:NoSchedule-
 ```
-### Selector
+### Selector & Labels
 
 El pod decide a cual node irse, es  como un label a un node
 
@@ -126,7 +126,15 @@ spec:
     size: Large
 ```
 
+Si algun objeto no define un `nodeSelector` entonces este se puede crear un cualquier nodo, a menos que tenga un taint.
+
 ### Node Affinity
+
+Igual para seleccionar un nodo, pero tiene más operadores: 
+
+- NotIn, 
+- In, 
+- Exists
 
 ```yaml
 apiVersion: v1
