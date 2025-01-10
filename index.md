@@ -55,6 +55,9 @@ Primary management component, orquesta todas las operaciones dentro del cluster:
 - nerdtcl: Es mejorcito
 - crictl: serve para cualquier container runtime que es el CRI compatible (como rocket)
 
+**Kubectl**
+- El kubectl interactua con el kube api server
+
 ## Pods
 
 Los siguentes 4 valores son requeridos:
@@ -70,6 +73,13 @@ spec:
 Si no hay un scheduler tu puedes asignarlo directamente en el yaml con:
 nodeName:
 o creando un archivo de tipo Binding y pasandolo por un http request
+
+### Static Pods
+
+Por si quieres tener un nodo funcionando "standalone" sin un master node
+puedes configurar un directorio (/etc/kubernetes/manifests) donde colocas los yamls
+de los pods y el kubelet se encaragará de aplicarlos y actualizalos.
+**Solo funciona con Pods, no funciona con Deployments, ni replica sets, etc**
 
 ## Services
 
