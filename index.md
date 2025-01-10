@@ -98,19 +98,22 @@ Esto no garantiza que el pod decida a cual nodo irse, lo que hace es que el nodo
 
 There are 3 taint effects
 
--NoSchedule: ningun pod se va a ir a ese nodo a menos que tu hagas el toleration a el.
--PreferNoSchedule: intentara no ponerlo pero si no hay de otra pondra el pod ahi 
--NoExecute: debes poner el toleration para que se qude ahi de otra forma mata todos 
+- NoSchedule: ningun pod se va a ir a ese nodo a menos que tu hagas el toleration a el.
+- PreferNoSchedule: intentara no ponerlo pero si no hay de otra pondra el pod ahi 
+- NoExecute: debes poner el toleration para que se qude ahi de otra forma mata todos 
+
+**To taint a node**
 
 ```sh
 kubectl taint nodes node1 app=blue:NoSchedule
 ```
-untaint
+**To remove a taint**
 
 ```sh
 kubectl taint nodes node1 key=values:NoSchedule-
 ```
 ### Selector
+
 El pod decide a cual node irse, es  como un label a un node
 
 ```yaml
@@ -145,23 +148,20 @@ spec:
             - Large
             - Medium 
 ```
-Node Affinity Types
-- Available
+#### Node Affinity Types
 
-requiredDuringSchedulingIgnoredDuringExecution
-preferredDuringSchedulingIgnoredDuringExecution
+- Available
+    - requiredDuringSchedulingIgnoredDuringExecution
+    - preferredDuringSchedulingIgnoredDuringExecution
 
 - Planned
 
-requiredDuringSchedulingRequiredDuringExecution
-preferredDuringSchedulingRequiredDuringExecution
+    - requiredDuringSchedulingRequiredDuringExecution
+    - preferredDuringSchedulingRequiredDuringExecution
 
 ![Affinity](./assets/Affinity.png)
 
 
-```sh 
-kubectl label nodes node-1 size=Large
-```
 ## Comandos útiles
 
 **Correr pod sin usar yaml**
@@ -230,7 +230,6 @@ kubectl config set-context --current --namespace=<namespace>
 kubectl config view | grep namespace
 ```
 
-
 **Actualizar un pod**
 
 ```sh
@@ -240,4 +239,15 @@ kubectl replace --force -f nginx.yaml
 **cuenta cuantos pods, eliminando la columna**
 ```sh
 kubectl get pod --selector env=prod --no-headers | wc -l
+```
+
+**Aplicar un label a un nodo**
+
+```sh
+kubectl label nodes node01 key=value
+```
+
+**To apply a label to a node**
+```sh 
+kubectl label nodes node-1 size=Large
 ```
