@@ -272,3 +272,15 @@ kubectl label nodes node01 key=value
 ```sh 
 kubectl label nodes node-1 size=Large
 ```
+
+**Actualizar la imagen de un pod**
+
+```sh
+kubectl set image pod/my-app my-container=nginx:latest
+```
+
+**Te da el yaml de pod y le pasa un comando**
+
+```
+kubectl run --restart=Never --image=busybox static-busybox --dry-run=client -o yaml --command -- sleep 1000 > /etc/kubernetes/manifests/static-busybox.yaml
+```
