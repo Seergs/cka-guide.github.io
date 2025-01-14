@@ -284,3 +284,9 @@ kubectl set image pod/my-app my-container=nginx:latest
 ```
 kubectl run --restart=Never --image=busybox static-busybox --dry-run=client -o yaml --command -- sleep 1000 > /etc/kubernetes/manifests/static-busybox.yaml
 ```
+
+**Obtener los eventos**
+
+```sh
+kubectl get events -o wide
+```
