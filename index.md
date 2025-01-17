@@ -16,6 +16,8 @@ Corre en cada nodo del cluster y espera instrucciones del kubeapi server y crea 
 Primero el kubeapi server le pregunta al scheduler en que nodo poner cierto pod, y después el kubeapi server le dice al kubelet para crearlo.
 Este lo crea, descargando la imagen y creando el container. No viene instalado por defecto con kubeadmn, tienes que instalarlo a mano en cada nodo.
 
+Contiene cAdvisor que se encarga de recolectar metricas del nodo y los pods.
+
 ### Kube proxy
 
 Se asegura que haya reglas necesarias en los worker nodes para permitir que los containers que están corriendo puedan alcanzar otros en otro worker node.
