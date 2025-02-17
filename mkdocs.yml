@@ -1,0 +1,30 @@
+site_name: Guía CKA
+nav:
+  - Home: index.md
+  - Cluster Architecture: architecture.md
+  - K8S Resources:
+    - Pods: k8s-resources/pods.md
+    - Services: k8s-resources/services.md
+    - Deployments: k8s-resources/deployments.md
+    - Secrets: k8s-resources/secrets.md
+    - ReplicaSets: k8s-resources/replicasets.md
+  - Taints & Affinity: pod-affinity.md
+  - Useful commands: useful-commands.md
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: black
+  features:
+    - navigation.path
+    - content.code.copy
+extra_javascript:
+  - common/Materializev0.97.8.js
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
