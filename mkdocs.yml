@@ -6,11 +6,14 @@ nav:
     - Pods: k8s-resources/pods.md
     - Services: k8s-resources/services.md
     - Deployments: k8s-resources/deployments.md
-    - Secrets: k8s-resources/secrets.md
+    - Configmap & Secrets: k8s-resources/configmap-and-secrets.md
     - ReplicaSets & DaemonSet: k8s-resources/replicasets-and-daemonset.md
   - Taints & Affinity: pod-affinity.md
   - Annotations & Labels: annotations-and-labels.md
   - Command & Arguments: commands-and-arguments.md
+  - Environment Variables: environment-variables.md
+  - Containers: containers.md
+  - Cluster Maintenance: cluster-maintenance.md
   - Useful commands: useful-commands.md
 theme:
   name: material
