@@ -103,3 +103,9 @@ kubectl run --restart=Never --image=busybox static-busybox --dry-run=client -o y
 ```sh
 kubectl get events -o wide
 ```
+
+**Escalar un deployment**
+
+```sh
+kubectl scale deployment mydeployment --replicas=3
+```
