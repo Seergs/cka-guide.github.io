@@ -14,6 +14,7 @@ nav:
   - Environment Variables: environment-variables.md
   - Containers: containers.md
   - Cluster Maintenance: cluster-maintenance.md
+  - ETCD: etcd.md
   - Useful commands: useful-commands.md
 theme:
   name: material
