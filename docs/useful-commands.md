@@ -109,3 +109,9 @@ kubectl get events -o wide
 ```sh
 kubectl scale deployment mydeployment --replicas=3
 ```
+
+**Ver los recursos de los pods**
+
+```sh
+kubectl top pod -a
+```

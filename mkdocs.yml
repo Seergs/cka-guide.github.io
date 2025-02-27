@@ -15,6 +15,7 @@ nav:
   - Containers: containers.md
   - Cluster Maintenance: cluster-maintenance.md
   - ETCD: etcd.md
+  - 2025 Updates: 2025-updates.md
   - Useful commands: useful-commands.md
 theme:
   name: material
