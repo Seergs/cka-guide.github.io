@@ -89,3 +89,61 @@ O si no puedes ver con kubectl puedes hacerlo con docker (o crictl)
 docker ps -a
 docker logs <container-id>
 ```
+
+## Certificate API
+
+#### Este certificado se puede extraer y pasar al user
+
+- El usuario crea su key
+  ```sh
+  openssl genrsa -out jane.key 2048
+  ```
+- Genera un CSR
+  ```sh
+  openssl req -new -key jane.key -subj "/CN=jane" -out jane.csr 
+  ```
+- Envia la request y el admin toma esa key y crea un objeto de tipo CSR CertificateSigningRequest y el .csr del usuario
+  ```yaml
+  apiVersion: certificates.k8s.io/v1beta1
+  kind: CertificateSigningRequest
+  metadata:
+    name: jane
+  spec:
+    groups:
+    - system:authenticated
+    usages:
+    - digital signature
+    - key encipherment
+    - server auth
+    request:
+      <certificate-goes-here>
+  ```
+  ```sh
+  cat jane.csr |base64 -w 0
+  kubectl create -f jane.yaml
+  ```
+
+  `-w 0` sirve para quitar los saltos de linea del base64
+
+![csr](../assets/csr.png)
+
+- Para ver los csr
+  ```sh
+  kubectl get csr
+  ```
+- Aprobar la request
+  ```sh
+  kubectl certificate approve jane
+  ```
+- Ver un certificado
+  ```sh
+  kubectl get csr jane -o yaml
+  ```
+- Para decodificarlo
+  ```sh
+  echo "<certificate>" |base64 --decode
+  ```
+  
+#### Todos las operaciones de certificados las hace el contoller manager
+
+- Si alguien tiene que firmar los certificados, deben tener los CA, root y private key del CA server. El controller manager ya tiene estas opciones
