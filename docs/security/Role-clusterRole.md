@@ -6,4 +6,4 @@ Este se usa para asignar roles a usuarios o nodos dentro de un namespace especí
 ClusterRoleBinding:
 Este se usa para asignar roles a nivel de clúster. Un ClusterRoleBinding puede otorgar permisos en todos los namespaces del clúster, no solo en un namespace específico.
 
- ![apis](../assets/role.PNG)
+ ![apis](../assets/role.png)
