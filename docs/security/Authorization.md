@@ -93,6 +93,48 @@ Este tipo funciona medante 4 componentes principales:
       apiGroup: rbac.authorization.k8s.io
     ```
 
+RBAC también se puede configurar imperativamente con los siguientes comandos:
+
+```
+# Create a role named "pod-reader" that allows user to perform "get", "watch" and "list" on pods
+kubectl create role pod-reader --verb=get --verb=list --verb=watch --resource=pods
+
+# Create a role named "pod-reader" with ResourceName specified
+kubectl create role pod-reader --verb=get --resource=pods --resource-name=readablepod --resource-name=anotherpod
+
+# Create a role named "foo" with API Group specified
+kubectl create role foo --verb=get,list,watch --resource=rs.apps
+
+# Create a cluster role named "pod-reader" that allows user to perform "get", "watch" and "list" on pods
+kubectl create clusterrole pod-reader --verb=get,list,watch --resource=pods
+
+# Create a cluster role named "pod-reader" with ResourceName specified
+kubectl create clusterrole pod-reader --verb=get --resource=pods --resource-name=readablepod --resource-name=anotherpod
+
+# Create a cluster role named "foo" with API Group specified
+kubectl create clusterrole foo --verb=get,list,watch --resource=rs.apps
+```
+
+Rolebindings:
+
+```
+# Create a role binding for user1, user2, and group1 using the admin cluster role
+kubectl create rolebinding admin --clusterrole=admin --user=user1 --user=user2 --group=group1
+
+# Create a role binding for service account monitoring:sa-dev using the admin role
+kubectl create rolebinding admin-binding --role=admin --serviceaccount=monitoring:sa-dev
+
+# Create a cluster role binding for user1, user2, and group1 using the cluster-admin cluster role
+kubectl create clusterrolebinding cluster-admin --clusterrole=cluster-admin --user=user1 --user=user2 --group=group1
+```
+
+**Nota**: Se puede utilizar un ClusterRole y ligarlo a un RoleBinding, este patrón tiene varias ventajas:
+
+1.	Reutilización de roles: Puedes definir un conjunto de permisos una vez (en el ClusterRole) y reutilizarlo en múltiples namespaces
+2.	Consistencia: Mantienes una definición única de permisos
+3.	Mantenibilidad: Si necesitas modificar los permisos, solo cambias el ClusterRole y se actualiza en todos los namespaces donde se usa
+
+
 ## Webhook
 
 Este modo funciona mediante un servicio HTTP externo, el cual deficide si las llamadas están autorizadas o no.

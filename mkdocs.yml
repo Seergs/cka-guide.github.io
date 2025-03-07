@@ -19,7 +19,7 @@ nav:
     - TLS Certificates: security/certificates.md
     - APIs: security/apis.md
     - Api Groups: security/apiGroups.md
-    - Role vs ClusterRole: security/Role-clusterRole.md
+    - Role vs ClusterRole (RBAC): security/Role-clusterRole.md
     - Authorization: security/Authorization.md
   - 2025 Updates: 2025-updates.md
   - Useful commands: useful-commands.md
