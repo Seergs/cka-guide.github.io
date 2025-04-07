@@ -24,6 +24,8 @@ nav:
     - Authorization: security/Authorization.md
     - Image security: security/image-security.md
     - Network Policies: security/network-policies.md
+  - Storage: storage.md
+  - Networking: networking.md
   - 2025 Updates: 2025-updates.md
   - Useful commands: useful-commands.md
 theme:
