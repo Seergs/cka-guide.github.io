@@ -8,6 +8,7 @@ nav:
     - Deployments: k8s-resources/deployments.md
     - Configmap & Secrets: k8s-resources/configmap-and-secrets.md
     - ReplicaSets & DaemonSet: k8s-resources/replicasets-and-daemonset.md
+    - Service Accounts: k8s-resources/serviceaccount.md
   - Taints & Affinity: pod-affinity.md
   - Annotations & Labels: annotations-and-labels.md
   - Command & Arguments: commands-and-arguments.md
@@ -21,6 +22,8 @@ nav:
     - Api Groups: security/apiGroups.md
     - Role vs ClusterRole (RBAC): security/Role-clusterRole.md
     - Authorization: security/Authorization.md
+    - Image security: security/image-security.md
+    - Network Policies: security/network-policies.md
   - 2025 Updates: 2025-updates.md
   - Useful commands: useful-commands.md
 theme:
