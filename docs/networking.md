@@ -44,6 +44,18 @@ netstate -npl | grep -i scheduler
 
 ## CNI
 
+Para checar los plugins de CNI soportados, se puede revisar:
+
+```sh
+ls /opt/cni/bin
+```
+
+Para checar que plugin usa el kubelet:
+
+```sh
+ls /etc/cni/net.d
+```
+
 ### Que maneja Kubeadm y qué no?
 
 Lo que maneja kubeadm automáticamente:
@@ -84,8 +96,159 @@ Los CNI comunes usan los siguientes rangos de IP para los pods:
 
 **Calico:** Si no se configura un rango específico, Calico usa por defecto el rango 192.168.0.0/16
 **Flannel:** Suele usar 10.244.0.0/16 por defecto
-**Weave:** Generalmente usa 10.32.0.0/12 por defecto
+**Weave:** Generalmente usa 10.32.0.0/12 por defecto, se puede cambiar con `weave launch --ipalloc-range=<rango_de_ip>`
 
 ### Comparativa
 
 ![cni](./assets/cni1.png)
+
+## Ingress
+
+```sh
+kubectl create ingress ingress-test --rule=“wear.my-online-store.com/wear*=wear-service:80”
+```
+
+![ingress](./assets/ingress.png)
+
+
+### Requerimientos
+
+- **Ingress controller:** Es un deployment, require poner unos labels y un configmap para tu nginx (si estás usando nginx)
+- **Service:** Se require que ese ingress-controller tenga un service, ya que este es el entrypoint desde el exterior
+
+### Ejemplos
+
+Hace proxy de requests a `/pay` al backend `pay-service`
+
+```yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+ name: test-ingress
+ namespace: critical-space
+ annotations:
+ nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+ rules:
+ - http:
+ paths:
+ - path: /pay
+ backend:
+ serviceName: pay-service
+ servicePort: 8282
+```
+
+Hace proxy de requests que hacen match con la regex al backend
+
+```yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+ annotations:
+ nginx.ingress.kubernetes.io/rewrite-target: /$2
+ name: rewrite
+ namespace: default
+spec:
+ rules:
+ - host: rewrite.bar.com
+ http:
+ paths:
+ - backend:
+ serviceName: http-svc
+ servicePort: 80
+ path: /something(/|$)(.*)
+```
+
+**Nota Importante**
+
+Existen anotaciones especificas por controller, por ejemplo para nginx esta anotación es importante:
+
+```yaml
+namespace: critical-space
+annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+```
+
+Lo que hace es que al proxied service no le agrega el path que se haya configurado en el ingress.
+Por ejemplo, el usuario accede a: https://midominio.com/app/login
+
+- En el ingress está configurado un path `/app`
+- Se hace un rewrite: `/app/login` --> `/login`
+- El backend tiene configurado una ruta de `/login` y responde correctamente:
+    
+    ```js
+    app.get("/login", (req, res) => {
+        res.send("Bienvenido al login!");
+    })
+    ```
+
+## Gateway
+
+El principal cambio del Ingress al Gateway es que el gateway tiene mas flexibilidad al momento de crear rutas y hacer el matching.
+
+El campo `allowedRoutes` determina a que  namespace se puede habilitar las HTTPRoute, TCPRoute, o otras rutas al Gateway.
+Configurando namespaces.from: All permite rutas desde todos los namespaces
+
+El Gateway API se enfoca principalmente en protocolos HTTP, HTTPS, TLS, TCP, y UDP para el routing. **ICMP no está soportado**
+
+
+
+### GatewayClass
+
+En el GatewayClass se define que controller (o servicio de proxy) se va a utilizar.
+Por ejemplo se podría utilizar el [nginx con gateway](http://nginx.org/gateway-controller)
+
+```yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: example-class
+spec:
+  controllerName: example.com/gateway-controller
+```
+
+### Gateway
+
+Define una instancia de infra que se encarga del manejo del trafico, como load balancer
+
+```yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: nginx-gateway
+spec:
+  gatewayClassName: example-class
+  Allowed Routes:
+    namespaces: all
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: 80
+```
+
+### HTTPRoute
+
+Define reglas de mapeo de trafico a nivel de HTTP para el listener del Gateway a los endpoints de los servicios de backend.
+
+```yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: example-httproute
+spec:
+  parentRefs:
+  - name: example-gateway
+  hostnames:
+  - "www.example.com"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /login
+    backendRefs:
+    - name: example-svc
+      port: 8080
+```
+
+![gateway1](./assets/gateway1.png)
+![gateway2](./assets/gateway2.png)
